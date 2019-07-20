@@ -37,5 +37,6 @@ def scrapeHolidays(filename, year=datetime.today().year):
 
     # save csv file
     csv_string = csv_string[:-1]
+    print(csv_string)
     f = open(filename, 'w')
     f.write(csv_string)
