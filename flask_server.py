@@ -21,7 +21,7 @@ def holidays(holidayType):
     if(not holidayType):
         holidayType = request.args.get('holidayType')
     today = datetime.today()
-    filename = f'csvs/holidays_{today.year}.csv'
+    filename = f'./csvs/holidays_{today.year}.csv'
     holidays = []
     next_ten_holidays = []
 
