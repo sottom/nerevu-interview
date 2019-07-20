@@ -19,7 +19,7 @@ pp = pprint.PrettyPrinter(indent=4).pprint
 
 
 
-def getNextTen():
+def getNextTen(holidayType=None):
     today = datetime.today()
     holidays = []
     next_ten_holidays = []
@@ -38,10 +38,11 @@ def getNextTen():
                 })
 
     for holiday in holidays:
-        if(holiday['date'] > today and len(next_ten_holidays) < 11):
+        # added 'in' so it's easier for user to use
+        if(holiday['date'] > today and len(next_ten_holidays) < 11 and holidayType and holidayType.lower() in holiday['type'].lower()):
             next_ten_holidays.append(holiday)
 
     return next_ten_holidays
 
 # getNextTen()
-pp(getNextTen())
+pp(getNextTen(holidayType='federal'))
