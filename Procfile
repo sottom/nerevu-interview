@@ -1,1 +1,1 @@
-web: gunicorn nerevu-interview:flask_server
+web: gunicorn flask_server:app
