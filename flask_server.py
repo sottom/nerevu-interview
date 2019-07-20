@@ -16,29 +16,28 @@ def holidays():
     # variables
     holidayType = request.args.get('holidayType')
     today = datetime.today()
+    filename = f'csvs/holidays_{today.year}.csv'
     holidays = []
     next_ten_holidays = []
-    filename = f'csvs/holidays_{today.year}.csv'
 
     # get holidays if they don't already exist
     if(not path.exists(filename)):
-        getHolidays(filename)
+        try: scrapeHolidays(filename)
+        except Exception as e:
+            return jsonify(str(e))
 
     # parse holidays csv into readable object
     with open(filename) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
-        try:
-            for i,row in enumerate(csv_reader):
-                if(i > 0 and row[0]):
-                    date = datetime.strptime(f'{row[0]}-{today.year}', '%b %d-%Y')
-                    holidays.append({
-                        'date': date,
-                        'name': row[2],
-                        'type': row[3],
-                        'details': row[4]
-                    })
-        except Exception as e:
-            print(e)
+        for i,row in enumerate(csv_reader):
+            if(i > 0 and row[0]):
+                date = datetime.strptime(f'{row[0]}-{today.year}', '%b %d-%Y')
+                holidays.append({
+                    'date': date,
+                    'name': row[2],
+                    'type': row[3],
+                    'details': row[4]
+                })
 
     # get the next ten holidays
     for holiday in holidays:

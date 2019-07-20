@@ -3,26 +3,22 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-def getHolidays(filename, year=datetime.today().year):
+def scrapeHolidays(filename, year=datetime.today().year):
     '''
     Scrape Holidays from https://www.timeanddate.com/holidays/us/
     by year and save them in a csv file
     '''
-    # variables
-    f = open(filename, 'w')
-    csv_string = ''
-
     # load html page into beautiful soup
     page = requests.get(f'https://www.timeanddate.com/holidays/us/{year}')
     soup = BeautifulSoup(page.text, 'lxml')
 
     # make sure table exists
-    try:
-        rows = soup.find('table', id='holidays-table').find_all('tr')
+    try: rows = soup.find('table', id='holidays-table').find_all('tr')
     except Exception as e:
-        raise Exception("Table Holidays not found. Check your scraping selectors to make sure they haven't changed")
+        raise Exception("Holiday scraper failed.")
 
     # create csv string
+    csv_string = ''
     for i, row in enumerate(rows):
         cells = row.find_all(recursive=False)
         for j, cell in enumerate(cells):
@@ -31,7 +27,7 @@ def getHolidays(filename, year=datetime.today().year):
             if(i == 0):
                 csv_string += (cell_text if cell_text else "Day of Week") + ','
             # ignore last line of unuseful text
-            elif(i =J len(rows) - 1): pass 
+            elif(i == len(rows) - 1): pass 
             # get cells
             else:
                 if(j == len(cells)-1): 
@@ -41,4 +37,5 @@ def getHolidays(filename, year=datetime.today().year):
 
     # save csv file
     csv_string = csv_string[:-1]
+    f = open(filename, 'w')
     f.write(csv_string)
