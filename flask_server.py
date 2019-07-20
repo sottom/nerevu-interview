@@ -2,19 +2,24 @@ import csv
 import os.path as path
 from flask import Flask, request, jsonify
 from datetime import datetime
-from helpers import getHolidays
+from helpers import scrapeHolidays
 
 app = Flask(__name__)
 
-@app.route("/holidays/")
-def holidays():
+@app.route('/holidays/', defaults={'holidayType': None})
+@app.route("/holidays/<holidayType>")
+def holidays(holidayType):
     '''
-    Return the next 10 holidays in the current year.
-    Passing in a "holidayType" query parameter will
-    filter the results (e.g. ?holidayType=federal)
+    Return the next 10 holidays in the current year. Adding a 
+    holiday type to the url (e.g. site.com/holidays/federal)
+    as well as specifying a "holidayType" query parameter 
+    (e.g. site.com/holidays?holidayType=federal) will filter 
+    the results by the holidayType (path takes precendence over
+    query parameter if both are specified)
     '''
     # variables
-    holidayType = request.args.get('holidayType')
+    if(not holidayType):
+        holidayType = request.args.get('holidayType')
     today = datetime.today()
     filename = f'csvs/holidays_{today.year}.csv'
     holidays = []
@@ -48,8 +53,3 @@ def holidays():
             else: next_ten_holidays.append(holiday)
 
     return jsonify(next_ten_holidays)
-
-
-# https://services.timeanddate.com/api/packages/free-trial.html
-# Try our API service for FREE for 3 months.
-# The following locations are available in our trial package: Amsterdam (Netherlands), Philipsburg (Netherlands), Maputo (Mozambique), Oslo (Norway), Lord Howe Island (Australia), and Romania for our holiday service.
