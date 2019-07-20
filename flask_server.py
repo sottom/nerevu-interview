@@ -15,7 +15,9 @@ def holidays(holidayType):
     as well as specifying a "holidayType" query parameter 
     (e.g. site.com/holidays?holidayType=federal) will filter 
     the results by the holidayType (path takes precendence over
-    query parameter if both are specified)
+    query parameter if both are specified).
+
+    View live demo at https://nexttenholidays.herokuapp.com/holidays/
     '''
     # variables
     if(not holidayType):
