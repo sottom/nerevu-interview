@@ -48,10 +48,11 @@ def holidays(holidayType):
 
     # get the next ten holidays
     for holiday in holidays:
-        if(holiday['date'] > today and len(next_ten_holidays) < 10):
-            if(holidayType):
-                if(holidayType.lower() in holiday['type'].lower()):
-                    next_ten_holidays.append(holiday)
-            else: next_ten_holidays.append(holiday)
+        if(len(next_ten_holidays) > 9): break
+        if(holiday['date'] > today):
+            if(not holidayType): 
+                next_ten_holidays.append(holiday)
+            elif(holidayType.lower() in holiday['type'].lower()):
+                next_ten_holidays.append(holiday)
 
     return jsonify(next_ten_holidays)
