@@ -15,6 +15,7 @@ def scrapeHolidays(filename, year=datetime.today().year):
     url = f'https://www.timeanddate.com/holidays/us/'
     browser.get(url) #navigate to the page
     innerHTML = browser.execute_script("return document.body.innerHTML") #returns the inner HTML as a string
+    browser.close()
     soup = BeautifulSoup(innerHTML, 'lxml')
 
     # make sure table exists
