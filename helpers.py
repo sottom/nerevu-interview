@@ -3,17 +3,25 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys  
+from selenium.webdriver.chrome.options import Options  
 
 def scrapeHolidays(filename, year=datetime.today().year):
     '''
     Scrape Holidays from https://www.timeanddate.com/holidays/us/
     by year and save them in a csv file
     '''
-    # load html page into beautiful soup
-    # page = requests.get(f'https://www.timeanddate.com/holidays/us/{year}')
-    browser = webdriver.Chrome() #replace with .Firefox(), or with the browser of your choice
+    # create a headless browser
+    chrome_options = Options()  
+    chrome_options.add_argument("--headless") 
+    browser = webdriver.Chrome(chrome_options=chrome_options)
+
+    # navigate to page
     url = f'https://www.timeanddate.com/holidays/us/'
-    browser.get(url) #navigate to the page
+    browser.get(url)
+
+    # Grab the innerHTML and load into Beautiful Soup 
+    # Alternatively do the scraping from selenium instead of beautiful soup
     innerHTML = browser.execute_script("return document.body.innerHTML") #returns the inner HTML as a string
     browser.close()
     soup = BeautifulSoup(innerHTML, 'lxml')
